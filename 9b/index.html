@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <script>
+      //const { json } = require('body-parser');
+      //const { response } = require('express');
+      
+      function responseHandler(data)
+      {
+          let div = document.getElementById("result");
+          let newElement = document.createElement("h1");
+          let text = document.createTextNode(data.result);
+          newElement.appendChild(text);
+          div.appendChild(newElement);
+      }
+      
+      function clickHandler()
+      {
+          console.log("button clicked");
+          let f1 = document.forms[0].f1.value;
+          let f2 = document.forms[0].f2.value;
+          let f3 = document.forms[0].f3.value;
+          let body = {f1:f1, f2:f2, f3:f3};
+          console.log("f1: " + f1);
+          console.log("f2: " + f2);
+          console.log("f3: " + f3);
+          fetch('http://localhost:3000/formdata',
+          {
+              method:'POST',
+              headers:{ 'Content-Type':'application/json' },
+              body:JSON.stringify(body)
+          }).then(response=>response.json()).then(json=>responseHandler(json));
+      }
+      
+      window.onload = function()
+      {
+          document.getElementById("sendButton").onclick=clickHandler;
+      }
+      </script>
+  </head>
+  <body>
+    <form action="/formdata" method="POST">
+      <label for="fname">First Value:</label><br>
+      <input type="text" id="f1" name="f1"><br>
+      <label for="lname">Second Value:</label><br>
+      <input type="text" id="f2" name="f2"><br>
+      <label for="lname">Operation:</label><br>
+      <input type="text" id="f3" name="f3">
+      <input type="button" id="sendButton" name="sendButton">sendButton</input>
+    </form>
+
+    <div id="result"></div>
+
+  </body>
+</html>
